@@ -4,6 +4,7 @@ import net.anfet.abstraction.IKey;
 import net.anfet.exception.ElementNotFoundException;
 import net.anfet.exception.RemapperException;
 import net.anfet.support.CollectonManipulator;
+import net.anfet.support.NameGetter;
 import net.anfet.support.Nullsafe;
 
 import org.junit.Assert;
@@ -126,6 +127,34 @@ public class KeysTest {
 		Assert.fail();
 	}
 
+	@Test
+	public void nameGetter() {
+		elements.add(new Element(123));
+		elements.add(new Element(234));
+		elements.add(new Element(567));
+		String[] names = elements.names();
+		for (String name : names) {
+			System.out.println("name " + name);
+		}
+	}
+
+	@Test
+	public void customNameGetter() {
+		elements.add(new Element(123));
+		elements.add(new Element(234));
+		elements.add(new Element(567));
+		String[] names = elements.names(new NameGetter<Element>() {
+			@Override
+			public String getName(Element element) {
+				return String.valueOf(element.getId()*1000);
+			}
+		});
+
+		for (String name : names) {
+			System.out.println("name " + name);
+		}
+	}
+
 
 	private static class Element implements IKey<Long> {
 
@@ -143,6 +172,11 @@ public class KeysTest {
 		@Override
 		public int compareTo(Long o) {
 			return Nullsafe.get(id, 0L).compareTo(Nullsafe.get(o, 0L));
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(id);
 		}
 	}
 

@@ -3,6 +3,7 @@ package net.anfet;
 import net.anfet.abstraction.IFilter;
 import net.anfet.abstraction.IKey;
 import net.anfet.exception.ElementNotFoundException;
+import net.anfet.support.NameGetter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -187,13 +188,15 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 
 
 	public synchronized String[] names() {
+		return names(NameGetter.DEFAULT);
+	}
+
+	public synchronized String[] names(NameGetter<T> getter) {
 		String[] names = new String[size()];
 		int i = 0;
-
 		for (T obj : this) {
-			names[i++] = obj.toString();
+			names[i++] = getter.getName(obj);
 		}
-
 		return names;
 	}
 
@@ -230,5 +233,14 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 	public synchronized boolean removeByKey(Object key) {
 		if (key == null) return false;
 		return map.remove(key) != null;
+	}
+
+
+	public synchronized T head() throws ElementNotFoundException {
+		return first();
+	}
+
+	public synchronized T tail() throws ElementNotFoundException {
+		return last();
 	}
 }
