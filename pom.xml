@@ -8,12 +8,6 @@
     <artifactId>lists</artifactId>
     <version>1.0.4</version>
 
-    <repositories>
-        <repository>
-            <id>local-maven-repo</id>
-        </repository>
-    </repositories>
-
     <properties>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
