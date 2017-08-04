@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class KeysTest {
 
-	Keys<Element> elements;
+	private Keys<Element> elements;
 
 	@org.junit.Before
 	public void setUp() throws Exception {

@@ -17,6 +17,7 @@ import java.util.TreeMap;
 /**
  * Отсортированный список объектов объектов забэкованный с помощью карты, позволяющий быстро искать элементы как по интексу, так и по ключу
  */
+@SuppressWarnings("WeakerAccess")
 public class Keys<T extends IKey> implements Collection<T>, Serializable {
 
 	private Map<Object, T> map = new TreeMap<>();
@@ -64,11 +65,7 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 
 	@Override
 	public synchronized boolean containsAll(Collection<?> collection) {
-		if (collection == null) {
-			return false;
-		}
-
-		return map.values().containsAll(collection);
+		return collection != null && map.values().containsAll(collection);
 	}
 
 	@Override
@@ -84,14 +81,7 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 
 	@Override
 	public synchronized boolean remove(Object object) {
-		if (object == null)
-			return false;
-
-		if (!(object instanceof IKey))
-			return false;
-
-
-		return map.remove(((IKey) object).getId()) != null;
+		return object != null && object instanceof IKey && map.remove(((IKey) object).getId()) != null;
 	}
 
 	@Override
@@ -134,8 +124,8 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 	}
 
 	public synchronized T get(int index) throws ElementNotFoundException {
-		List<T> list = new ArrayList<T>(map.values());
-		T element = null;
+		List<T> list = new ArrayList<>(map.values());
+		T element;
 		try {
 			element = list.get(index);
 		} catch (IndexOutOfBoundsException ex) {
@@ -231,8 +221,7 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 	}
 
 	public synchronized boolean removeByKey(Object key) {
-		if (key == null) return false;
-		return map.remove(key) != null;
+		return key != null && map.remove(key) != null;
 	}
 
 
@@ -242,5 +231,15 @@ public class Keys<T extends IKey> implements Collection<T>, Serializable {
 
 	public synchronized T tail() throws ElementNotFoundException {
 		return last();
+	}
+
+	public synchronized Keys<T> extract(IFilter<T> filter) {
+		if (filter == null) return new Keys<>(this);
+
+		Keys<T> newKeys = new Keys<>();
+		for (T item : this) {
+			if (filter.filter(item)) newKeys.add(item);
+		}
+		return newKeys;
 	}
 }

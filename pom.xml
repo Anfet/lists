@@ -6,17 +6,11 @@
 
     <groupId>net.anfet</groupId>
     <artifactId>lists</artifactId>
-    <version>1.0.0.3</version>
+    <version>1.0.4</version>
 
     <repositories>
         <repository>
             <id>local-maven-repo</id>
-            <url>file:///${project.basedir}\libs</url>
-        </repository>
-
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
